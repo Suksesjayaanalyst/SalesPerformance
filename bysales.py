@@ -89,5 +89,27 @@ if location == "TENGSEK":
     BySales = BySales[BySales['Sales_Employee_Name'].isin(tengsek)]
 
 
-st.dataframe(BySales)
-st.dataframe(RekapSales)
+# st.dataframe(BySales)
+
+excluded_columns = [
+    "TotalBPAktifAll", "BPAktifSesuai", "BPAktifTidakSesuai", "TotalBPMasterSelisih"
+]
+
+# Mengubah semua kolom numeric kecuali kolom yang dikecualikan menjadi format Rupiah
+forTable = RekapSales.apply(
+    lambda col: col.apply(
+        lambda x: f"Rp {x:,.0f}".replace(",", ".") if isinstance(x, (int, float)) and col.name not in excluded_columns else x
+    )
+)
+
+# Membuat GridOptionsBuilder
+gb = GridOptionsBuilder.from_dataframe(forTable)
+
+# Membekukan kolom slpname dan targetslp di sebelah kiri
+gb.configure_columns(['slpname', 'targetslp'], pinned='left')
+
+# Membangun opsi grid
+grid_options = gb.build()
+
+# Menampilkan DataFrame di AgGrid
+AgGrid(forTable, gridOptions=grid_options)
