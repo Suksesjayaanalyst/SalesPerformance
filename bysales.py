@@ -116,7 +116,7 @@ AgGrid(forTable, gridOptions=grid_options)
 
 
 if location == "PIK":
-    st.header("SPV Linda")
+    st.header("SPV")
     selectspv = st.selectbox("Choose:", options=["Linda", "Ari", "Regen"])
     if selectspv == "Linda":
         spvsales = ["Ahmad Rizal", "Rizki", "Rachel Valencia", "Rosida Juniaz Santi"]
