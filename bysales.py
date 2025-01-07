@@ -113,3 +113,13 @@ grid_options = gb.build()
 
 # Menampilkan DataFrame di AgGrid
 AgGrid(forTable, gridOptions=grid_options)
+
+
+if location == "PIK":
+    st.header("SPV Linda")
+    sales = st.multiselect("Choose:", options=pik, default=["Ahmad Rizal", "Rizki", "Rachel Valencia", "Rosida Juniaz Santi"])
+    spvlinda = forTable[forTable['slpname'].isin(sales) ]
+    gb = GridOptionsBuilder.from_dataframe(spvlinda)
+    gb.configure_columns(['slpname', 'targetslp'], pinned='left')
+    grid_options = gb.build()
+    AgGrid(spvlinda, gridOptions=grid_options, height=175)
