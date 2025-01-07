@@ -117,7 +117,15 @@ AgGrid(forTable, gridOptions=grid_options)
 
 if location == "PIK":
     st.header("SPV Linda")
-    sales = st.multiselect("Choose:", options=pik, default=["Ahmad Rizal", "Rizki", "Rachel Valencia", "Rosida Juniaz Santi"])
+    selectspv = st.selectbox("Choose:", options=["Linda", "Ari", "Regen"])
+    if selectspv == "Linda":
+        spvsales = ["Ahmad Rizal", "Rizki", "Rachel Valencia", "Rosida Juniaz Santi"]
+    elif selectspv == "Ari":
+        spvsales = ["Ine", "Sadarmawati", "Femi Permatasari", "Leppi Dianti"]
+    elif selectspv == "Regen":
+        spvsales = ["Dina", "Shifa Anggraeni", "Abdul Wahid", "Indah Mellani"]
+
+    sales = st.multiselect("Choose:", options=pik, default=spvsales)
     spvlinda = forTable[forTable['slpname'].isin(sales) ]
     gb = GridOptionsBuilder.from_dataframe(spvlinda)
     gb.configure_columns(['slpname', 'targetslp'], pinned='left')
