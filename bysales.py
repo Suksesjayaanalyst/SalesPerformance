@@ -92,7 +92,7 @@ if location == "TENGSEK":
 # st.dataframe(BySales)
 
 excluded_columns = [
-    "TotalBPAktifAll", "BPAktifSesuai", "BPAktifTidakSesuai", "TotalBPMasterSelisih"
+    "TotalBPAktifAll","Selisih BP","TotalBPMaster", "BPAktifSesuai", "BPAktifTidakSesuai", "TotalBPMasterSelisih"
 ]
 
 # Mengubah semua kolom numeric kecuali kolom yang dikecualikan menjadi format Rupiah
