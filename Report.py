@@ -94,13 +94,13 @@ table1 = table1[table1['GroupSlp'] == selectedsales].reset_index(drop=True)
 columns_except_groupslp = [col for col in table1.columns if col not in [
     "GroupSlp", "targetslp", "slpname", "TotalRevenue", "Total_Selisih", 
     "TotalBPAktifAll", "BPAktifSesuai", "BPAktifTidakSesuai", 
-    "TotalBPMaster", "Selisih BP", "Reason"
+    "TotalBPMaster", "Selisih BP"
 ]]
 
 selectedcolumns = st.multiselect("Columns", options=columns_except_groupslp, default=columns_except_groupslp)   
 
 # Menggabungkan kolom tetap dengan kolom yang dipilih
-final_columns = ['slpname', 'GroupSlp', 'targetslp'] + selectedcolumns + ['TotalRevenue','Total_Selisih','TotalBPAktifAll','BPAktifSesuai','BPAktifTidakSesuai','TotalBPMaster','Selisih BP','Reason']
+final_columns = ['slpname', 'GroupSlp', 'targetslp'] + selectedcolumns + ['TotalRevenue','Total_Selisih','TotalBPAktifAll','BPAktifSesuai','BPAktifTidakSesuai','TotalBPMaster','Selisih BP']
 
 table1_final = table1[final_columns]
 
