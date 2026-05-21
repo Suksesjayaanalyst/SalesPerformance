@@ -1,66 +1,42 @@
 import streamlit as st
-import io
-import streamlit as st
-import plotly.express as px
-from oauth2client.service_account import ServiceAccountCredentials
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from datetime import datetime
-from google.oauth2 import service_account
-import time
-from st_aggrid import AgGrid, GridOptionsBuilder
 import gspread
 import pandas as pd
 
+from google.oauth2 import service_account
+from st_aggrid import AgGrid, GridOptionsBuilder
+from googleapiclient.discovery import build
 
-
-
-st.set_page_config("Sales Performance || SPV")
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
 
 @st.cache_data
 def get_data_from_google():
+
     with st.spinner("Getting data from Google Sheets..."):
-        # Mengambil kredensial dari st.secrets
-        google_creds = st.secrets["google"]
 
-        # Scopes yang diperlukan untuk Google Drive API
-        SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+        google_creds = dict(st.secrets["google"])
 
-        # Autentikasi menggunakan service account dari st.secrets
         credentials = service_account.Credentials.from_service_account_info(
-            {
-                "type": google_creds["type"],
-                "project_id": google_creds["project_id"],
-                "private_key_id": google_creds["private_key_id"],
-                "private_key": google_creds["private_key"],
-                "client_email": google_creds["client_email"],
-                "client_id": google_creds["client_id"],
-                "auth_uri": google_creds["auth_uri"],
-                "token_uri": google_creds["token_uri"],
-                "auth_provider_x509_cert_url": google_creds["auth_provider_x509_cert_url"],
-                "client_x509_cert_url": google_creds["client_x509_cert_url"]
-            }, scopes=SCOPES)
+            google_creds,
+            scopes=SCOPES
+        )
 
-        # Membangun layanan Google Drive API
-        service = build('drive', 'v3', credentials=credentials)
         client = gspread.authorize(credentials)
-        
-        # Mengakses worksheet dan mengubah menjadi DataFrame
-        sheet = client.open_by_key("1iK7Rv8lY5vbcy9ODj12-MbAvdqC7lwfH0UawHNPpVjs")
-        worksheet = sheet.worksheet('BySales')
-        BySales = worksheet.get_all_records()
-        BySales = pd.DataFrame(BySales)
 
-        worksheet = sheet.worksheet('RekapSales')
-        RekapSales = worksheet.get_all_records()
-        RekapSales = pd.DataFrame(RekapSales)
-        
-        # Mengembalikan data
-        return BySales, RekapSales
-    
+        sheet = client.open_by_key(
+            "1iK7Rv8lY5vbcy9ODj12-MbAvdqC7lwfH0UawHNPpVjs"
+        )
+
+        worksheet = sheet.worksheet("BySales")
+        bysales = pd.DataFrame(worksheet.get_all_records())
+
+        worksheet = sheet.worksheet("RekapSales")
+        rekapsales = pd.DataFrame(worksheet.get_all_records())
+
+        return bysales, rekapsales
+
 if 'bysales' not in st.session_state:
     st.session_state.bysales = get_data_from_google()[0]
     st.session_state.rekapsales = get_data_from_google()[1]
