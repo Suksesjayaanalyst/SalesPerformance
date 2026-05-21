@@ -27,7 +27,7 @@ def get_data_from_google():
         google_creds = st.secrets["google"]
 
         # Scopes yang diperlukan untuk Google Drive API
-        SCOPES = ['https://www.googleapis.com/auth/drive']
+        SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 
         # Autentikasi menggunakan service account dari st.secrets
         credentials = service_account.Credentials.from_service_account_info(
